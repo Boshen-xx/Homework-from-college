@@ -91,3 +91,27 @@ int main()
 	printf("error");
 	return 0;
 }
+
+#include<stdio.h>//素数判断
+int main ()
+{
+	int a[101],i,j;
+	for(i=0;i<=100;i++){
+		a[i]=1;
+	}
+	for(i=2;i<=100;i++){
+		if(a[i]==1){
+			j=2;
+			while(i*j<=100){
+				a[i*j]=0;
+				j++;
+			}
+		}
+	}
+	for(i=2;i<101;i++){
+		if(a[i]==1){
+			printf("%d,",i);
+		}
+	}
+	return 0;
+}
