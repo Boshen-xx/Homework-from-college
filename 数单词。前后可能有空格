@@ -1,0 +1,43 @@
+#include<stdio.h>
+int main()
+{
+	char ch;
+	int count1=0,count[257]={0,},sign[257]={0,},i=1,word=0;//count记录第多少位是空格，sign记录第几个空格是第多少位 
+	ch=getchar();
+	if(ch=' '){
+		word--;
+		count1++;
+		count[count1]=1;
+		sign[i]=count1;
+		i++;
+	}
+	else{
+		count1++;
+		count[count1]=1;
+		sign[i]=count1;
+		i++;
+	}//把第一个是空格的情况解决 
+	while((ch=getchar())!='\n'){
+		count1++;
+		if(ch==' '){
+			count[count1]=1;
+			sign[i]=count1;
+			i++;
+		}
+	}
+	for(int j=0;j<=256;j++){
+		if((sign[j+1]-sign[j]>0)){//两空格之间有东西的算单词 
+			word++;
+			continue;
+		}
+		else if(sign[j+1]==sign[j]){
+			break;
+		}
+	}
+	if(count[count1--]==1){//把最后输出的是空格的解决 
+		word--;
+	}
+	word++;// 计算可得结果出来要加一..
+		printf("%d",word);
+	return 0;
+}
