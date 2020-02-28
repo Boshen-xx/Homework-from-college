@@ -1,0 +1,28 @@
+#include<stdio.h>
+#include<string.h>
+void my_strcpy(char* destination,char* source);
+int main()
+{
+	char* input1=NULL;
+	char input[10000];
+	input1=input;
+	scanf("%s",input);
+	char* copyinput1=NULL;
+	char copyinput[10000];
+	copyinput1=copyinput;
+	my_strcpy(copyinput1,input1);
+	if(*input1!=*copyinput1){
+		printf("error");
+	}
+	printf("%s1",copyinput);
+	return 0;
+}
+
+void my_strcpy(char* destination,char* source)
+{
+	while(*source!='\0'){
+		*destination=*source;
+		destination++;
+		source++; 
+	}
+}
