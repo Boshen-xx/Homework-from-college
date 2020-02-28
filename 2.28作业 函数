@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include<stdio.h>//自己的copy函数
 #include<string.h>
 void my_strcpy(char* destination,char* source);
 int main()
@@ -25,4 +25,27 @@ void my_strcpy(char* destination,char* source)
 		destination++;
 		source++; 
 	}
+}
+
+int find(int n)//找小于等于它的水仙花的个数的函数
+{
+	int ret=0,i;
+	if(n<100||n>=1000){
+		ret=0;
+	}
+	else if(n>=500){
+		ret=4;
+	}
+	else{
+		for(i=104;i<=n;i++){
+			int ge,shi,bai;
+			ge=i%10;
+			shi=i/10%10;
+			bai=i/100;
+			if(ge*ge*ge+shi*shi*shi+bai*bai*bai==i){
+				ret++;
+			}
+		}
+	}
+	return ret;
 }
