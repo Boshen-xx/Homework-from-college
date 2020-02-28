@@ -49,3 +49,27 @@ int find(int n)//找小于等于它的水仙花的个数的函数
 	}
 	return ret;
 }
+
+#include<iostream>//第一次用sort
+#include<algorithm>
+#include<cstring>
+#include<cstdio>
+using namespace std;
+int main()
+{
+	int n;
+	scanf("%d",&n);
+	int* a;
+	int i,j,t;
+	a=(int*)malloc(n*sizeof(int));
+	for(i=0;i<n;i++){
+		scanf("%d",&a[i]);
+	}
+	sort(a,a+n);
+	for(i=0;i<n-1;i++){
+		printf("%d,",a[i]);
+	}
+	printf("%d",a[i]);
+	free(a);
+	return 0;
+}
