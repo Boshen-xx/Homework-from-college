@@ -126,3 +126,30 @@ int main()
 	}
 	return 0;
 }
+
+#include<stdio.h>//旋转90度的字符矩阵
+#include<string.h>
+//ÏÈµ¹×ÅÊä³öµÚÒ»ÁÐ£¬È»ºó»»ÐÐµ¹×ÅÊä³öµÚ¶þÁÐ 
+int main()
+{
+	int T;
+	scanf("%d",&T);
+	while(T--){
+		int n,i,j;
+		scanf("%d",&n);
+		getchar();
+		char a[n][n+1];
+		for(i=0;i<n;i++){
+			for(j=0;j<n+1;j++){
+				scanf("%c",&a[i][j]);
+			}
+		}
+		for(i=0;i<n;i++){
+			for(j=0;j<n;j++){
+				printf("%c",a[n-j-1][i]);
+			}
+			printf("\n");
+		}
+	}
+	return 0;
+}
