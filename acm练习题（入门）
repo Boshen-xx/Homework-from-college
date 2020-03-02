@@ -153,3 +153,47 @@ int main()
 	}
 	return 0;
 }
+
+#include<stdio.h>//蛇形填数
+#define MAX 100
+int a[MAX][MAX]={0};//½«Õû¸öÊý×é³õÊ¼»¯ÎªÁã
+int main()
+{
+	int i=0,j;
+	int n,count=1;
+	scanf("%d",&n);
+	j=n-1;
+	while(count<=n*n)
+	{       
+		while(i<n&&a[i][j]==0)
+		{
+			a[i][j]=count++;
+			i++;
+		}
+		while(j>0&&a[i-1][j-1]==0)
+		{
+			a[i-1][j-1]=count++;
+			j--;
+		}
+		while(i>1&&a[i-2][j]==0)
+		{
+			a[i-2][j]=count++;
+			i--;
+		}
+		while(j<n-2&&a[i-1][j+1]==0)
+		{
+			a[i-1][j+1]=count++;
+			j++;
+		}
+	}
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n;j++)
+		{
+			printf("%3d",a[i][j]);
+		}
+		printf("\n");
+	}
+	return 0;
+}
+
