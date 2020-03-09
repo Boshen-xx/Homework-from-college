@@ -1,0 +1,77 @@
+#include<stdio.h>//点球大战（不考虑特殊数据）
+#include<string.h>
+int main()
+{
+    int N;
+    scanf("%d",&N);
+    while(N!=0){
+        while(getchar()!='\n'){}//吸收回车
+        char output[4][N+2];//定义一个用来存放数据的
+        int i;
+        int cnt3=0,cnt2=0;//用来记录进球数
+        for(i=1;i<=N;i++){//用来记录第i个球员是否进球从而相应赋值，奇偶不同赋值
+            char temp[102];
+            gets(temp);//临时输入的球员名字及进球与否
+            int j=0;
+//            int decision=0;//
+            const char space[2]=" ";
+            char* token=strtok(temp,space);//一个一个单词判断是否是no good/good
+            while(token!=NULL){
+                    if(strcmp(token,"no")==0){//如果有no
+                        if(i%2==0){
+                            output[3][i/2]='X';//如果i整除2，那么就让
+                        }
+                        else{
+                            output[2][(i+1)/2]='X';
+                        }
+                        //decision=1;
+                        break;
+                    }
+                    if(strcmp(token,"good")==0){
+                        if(i%2==0){
+                            output[3][i/2]='0';
+                            cnt3++;
+                        }
+                        else{
+                            output[2][(i+1)/2]='0';
+                            cnt2++;
+                        }
+                        break;
+                    }
+                token=strtok(NULL,space);
+            }
+        }
+        if(N%2==1){
+        	output[3][(N+1)/2]='-';
+		}
+        int k;
+        if(N%2==0){
+            for(i=1;i<=N/2;i++){
+                printf("%d ",i);
+            }
+            printf("score\n");
+            for(i=2;i<=3;i++){
+                for(k=1;k<=N/2;k++){
+                    printf("%c ",output[i][k]);
+                }
+                if(i==2){printf("%d\n",cnt2);}
+                if(i==3){printf("%d\n",cnt3);}
+            }
+        }
+        else{
+            for(i=1;i<=(N+1)/2;i++){
+                printf("%d ",i);
+            }
+            printf("score\n");
+            for(i=2;i<=3;i++){
+                for(k=1;k<=(N+1)/2;k++){
+                    printf("%c ",output[i][k]);
+                }
+                if(i==2){printf("%d\n",cnt2);}
+                if(i==3){printf("%d\n",cnt3);}
+            }
+        }
+        scanf("%d",&N);
+    }
+    return 0;
+}
