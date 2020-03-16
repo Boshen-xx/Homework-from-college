@@ -1,0 +1,53 @@
+#include<stdio.h>
+#include<math.h>
+struct person{
+	char name[10];
+	int ch;
+	int ma;
+	int en;
+	int sum;
+}p[1010];
+int main()
+{
+	int n;
+	int i,j,k;
+	scanf("%d",&n);
+	for(i=1;i<=n;i++){
+		scanf("%s%d%d%d",p[i].name,&p[i].ch,&p[i].ma,&p[i].en);
+		p[i].sum=p[i].ch+p[i].ma+p[i].en;
+	}
+	for(i=1;i<=n;i++){
+		for(j=i+1;j<=n;j++){
+		    if(abs(p[i].sum-p[j].sum)<=10){
+			    if(abs(p[i].ch-p[j].ch)<=5){
+    				if(abs(p[i].ma-p[j].ma)<=5){
+	    				if(abs(p[i].en-p[j].en)<=5){
+                        for(k=0;k<=10;k++){
+                            if(p[i].name[k]>p[j].name[k]){
+				    		    printf("%s %s\n",p[j].name,p[i].name);
+				    		    break;
+                            }
+                            else if(p[i].name[k]<p[j].name[k]){
+                                printf("%s %s\n",p[i].name,p[j].name);
+                            	break;
+							}
+                            }
+                        }
+                        else{
+                            continue;
+		    	    	}
+		        	}
+                    else{
+                        continue;
+	        		}
+    	    	}else{
+                    continue;
+    			}
+	    	}
+            else{
+                continue;
+		    }
+        }
+	}
+	return 0;
+}
