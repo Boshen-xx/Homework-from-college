@@ -1,0 +1,44 @@
+#include<stdio.h>
+int a[100001]={0},b[100001]={0},e[100001]={0};
+void prime(int c)
+{
+	int o;
+	int j=1;
+	for(o=2;o<=c;o++){//a做遍历，是素数判断机 
+		if(a[o]==0){
+			b[j]=o;//储存第i个质数 ,b1-bj
+			j++;
+		int t=2;
+		while(o*t<=c){//标记质数的倍数 
+			a[o*t]=1;
+			t++;
+		}}
+	}
+}
+int main()
+{
+	int n;
+	scanf("%d",&n);
+	int i,j,k;
+	for(i=1;i<=n;i++){
+		scanf("%d",&e[i]);//扫入n个数 
+	}
+	int max;
+	max=e[1];//求最大数 
+	for(i=2;i<=n;i++){
+		if(e[i]>max){
+			max=e[i];
+		}
+	}
+	prime(max);//将最大数传进去，打表 
+	for(j=1;j<=n;j++){
+		i=1;
+		while(e[j]!=b[i]&&b[i]<=max&&b[i]>0){//循环条件注意 
+			i++;
+		}
+		if(e[j]==b[i]){
+			printf("%d ",b[i]);
+		}
+	}
+	return 0;
+}
