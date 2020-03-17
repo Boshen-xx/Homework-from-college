@@ -187,3 +187,42 @@ int main()
 	}
 	return 0;
 }
+#include<stdio.h>//DF
+int n;
+int cnt;
+int a[4][40];
+int b[18];
+void dfs(int t){
+    if(t>n){
+        if(cnt<3){
+            for(int k=1;k<=n;k++){
+                printf("%d ",b[k]);
+            }
+            printf("\n");
+        }
+        cnt++;
+        return;
+    }
+    else{
+        for(int j=1;j<=n;j++){
+            if(a[1][j]==0&&a[2][t+j]==0&&a[3][t-j+n]==0){
+                a[1][j]=1;//记录列的
+                a[2][t+j]=1;//记录反对角线
+                a[3][t-j+n]=1;//记录对角线
+                b[t]=j;
+                dfs(t+1);
+                a[1][j]=0;
+                a[2][t+j]=0;
+                a[3][t-j+n]=0;
+                b[t]=0;
+            }
+        }
+    }
+}
+int main()
+{
+    scanf("%d",&n);
+    dfs(1);
+    printf("%d",cnt);
+    return 0;
+}
