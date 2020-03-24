@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>//vector
+#include<queue>
+#include<iostream>
+#include<cstdio>
+using namespace std;
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    vector<int> v;
+    for(int i=1;i<=n;i++){
+        v.push_back(i);
+    }
+    int t=0;
+    while(v.size()!=1){
+        t=(t+m-1)%n;
+        printf("%d ",v[t]);
+        v.erase(v.begin()+t);
+        n--;
+    }
+    printf("%d",v[0]);
+    return 0;   
+}
