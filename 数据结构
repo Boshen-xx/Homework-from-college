@@ -21,3 +21,115 @@ int main()
     printf("%d",v[0]);
     return 0;   
 }
+
+//指针实现链表
+#include<stdio.h>
+#include<stdlib.h>
+//定义链表
+typedef struct struct_node{
+    int value;
+    struct struct_node *next; 
+}Node;
+
+typedef struct struct_list{
+    Node* head;
+}List;
+//在链表之后添加元素
+void right_add(List *plist,int a,int n);
+//在数之前插入元素
+void left_add(List *plist,int a,int n);
+//删除个别
+void delete_pp(List * plist,int number);
+//清除链表
+void delete_list(Node* head);
+//打印链表
+void myprint(List *plist);
+
+int main()
+{
+    int n,m,i;
+    scanf("%d",&n);
+    List p;
+    p.head=NULL;
+    Node *r=(Node*)malloc(sizeof(Node));
+    r->value=1;
+    r->next=NULL;
+    p.head=r;
+    for(i=2;i<=n;++i){
+        int x,y;
+        scanf("%d%d",&x,&y);
+        if(y==0){
+            left_add(&p,x,i);
+        }
+        else if(y==1){
+            right_add(&p,x,i);
+        }
+    }
+    scanf("%d",&m);
+    for(i=1;i<=m;++i){
+        int x;
+        scanf("%d",&x);
+        delete_pp(&p,x);
+    }
+    myprint(&p);
+    delete_list(p.head);   
+    return 0;
+}
+
+void right_add(List *plist,int a,int n){
+    Node *q,*p,*r;
+    r=(Node*)malloc(sizeof(Node));
+    r->value=n;
+    r->next=NULL;
+    for(q=NULL,p=plist->head;p;q=p,p=p->next){
+        if(q!=NULL&&q->value==a){
+            r->next=q->next;
+            q->next=r;
+        }
+    }
+    if(q->value==a){
+   		q->next=r;
+	}
+}
+void left_add(List *plist,int a,int n){
+    Node *q,*p,*r;
+    r=(Node*)malloc(sizeof(Node));
+    r->value=n;
+    r->next=NULL;
+    for(q=NULL,p=plist->head;p;q=p,p=p->next){
+        if(p->value==a&&q!=NULL){//排除插入队首前面 
+            r->next=q->next;
+            q->next=r;
+        }
+        else if(p->value==a&&q==NULL){
+        	r->next=p;
+        	plist->head=r;
+		}
+    }
+}
+//删除个别
+void delete_pp(List * plist,int number){
+    Node *p,*q;
+    for(q=NULL,p=plist->head;p;q=p,p=p->next){
+        if(p->value==number){
+            q->next=p->next;
+            free(p);
+            break;
+        }
+    }
+}
+//清除链表
+void delete_list(Node* head){
+    Node* p=head,*q=NULL;
+    for ( p=head ; p ; p=q ){
+        q=p->next;
+        free(p);
+    }
+}
+//打印链表
+void myprint(List *plist){
+    Node *p;
+    for(p=plist->head;p;p=p->next){
+        printf("%d ",p->value);
+    }
+}
