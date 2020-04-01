@@ -226,3 +226,54 @@ int main()
     printf("%d",cnt);
     return 0;
 }
+
+/**题目例子分析：需要n个数组表示机器里工件的进度：a1、m2、...an，读入后创建 
+***需要一个s[2*m+1]数组储存安排顺序。读入，还需要一个cnt[m+1] 
+***一行一行读入，需要二维数组记录工作顺序。b[n+1][2]
+***需要二维数组c[n+1][2]来储存相应机器上工作时长 
+***读入数据后，循环s的长度次，分析第i次 
+***安排在有空位的前一次工序后的第一个位置往后，占据相应时间
+***注意：：b是表示工序的，所以横向用b纵向用k
+**/
+#include<stdio.h>
+int n,m,i,k,t,x;
+int cnt[21];//记录如果cnt[s[i]]==1就是出现过  
+int s[450];//记录安排顺序 
+int a[30];//第i个工件的最后时间 
+int con[30][600];
+int b[30][30];//第i个工件的工序，123或213... 
+int c[30][30];//第i个工件的工序的相应工序时长 
+int main()
+{
+	scanf("%d%d",&n,&m);
+	for(i=1;i<=n*m;++i)
+		scanf("%d",&s[i]);
+	for(i=1;i<=m;++i)
+		for(k=1;k<=n;++k)
+			scanf("%d",&b[i][k]);
+	for(i=1;i<=m;++i)
+		for(k=1;k<=n;++k)
+			scanf("%d",&c[i][k]);
+	for(i=1;i<=n*m;++i){
+		cnt[s[i]]++;
+		for(k=a[s[i]]+1;;++k){
+			if(con[b[s[i]][cnt[s[i]]]][k]==0)//我终于懂了，在工序里面的次序
+				x++;
+			else
+				x=0;
+			if(x==c[s[i]][cnt[s[i]]]){
+				a[s[i]]=k;
+				for(t=k-x+1;t<=k;t++)
+					con[b[s[i]][cnt[s[i]]]][t]=1;
+				x=0;
+				break;
+			}
+		}
+	}
+	int max=a[1];
+	for(i=2;i<=m;++i)
+		if(a[i]>=max)
+			max=a[i];
+	printf("%d",max);		
+	return 0;			
+}
