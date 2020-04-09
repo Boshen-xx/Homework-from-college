@@ -1,0 +1,233 @@
+#include<bits/stdc++.h>
+#define N 8
+using namespace std;
+//使A-H频数与其一一对应
+typedef struct eachchar{
+	char x;
+	int frequency;
+	int flag;
+	char code[1000];
+}ec;
+//对于每个结点，记录它的左儿子、右儿子、父亲地址、频数 
+typedef struct Node{
+	struct Node* left;
+	struct Node* rightson;
+	struct Node* father;
+	ec knot;
+	char code[1000];
+}Node;
+typedef struct List{
+	Node* pointer;
+}List;
+//按频数排序 
+bool cmp_fre(ec p,ec q){
+	if(q.frequency!=q.frequency) return p.frequency<q.frequency;
+	else return p.flag<q.flag;
+}
+//按ASCII码排序
+bool cmp_x(ec p,ec q){
+	return p.x<q.x;
+}
+void sum_each_character(char* p,int* q,int len)
+{
+	for(int i=0;i<len;i++){
+		if(p[i]=='A') q[1]++;
+		else if(p[i]=='B') q[2]++;
+		else if(p[i]=='C') q[3]++;
+		else if(p[i]=='D') q[4]++;
+		else if(p[i]=='E') q[5]++;
+		else if(p[i]=='F') q[6]++;
+		else if(p[i]=='G') q[7]++;
+		else if(p[i]=='H') q[8]++;
+	}
+}
+//创建结点 
+Node* create_nil(Node* p,int x){
+	p->father=NULL;
+	p->left=NULL;
+	p->rightson=NULL;
+	p->knot.frequency=x;
+	return p;
+}
+int min_pointer_fre(ec* p,int j){
+	int cnt=0,min=0;
+	for(int i=j;i<=N;i++){
+		if(p[i].flag==1){
+			cnt++;
+			if(cnt==1){
+				min=p[i].frequency;
+			}
+			if(p[i].frequency<=min){
+				min=p[i].frequency;
+			}
+		}
+	}
+	return min;
+}
+//创建第一个父亲 
+void create_newknot(List* plist,int x,int y,ec* ec,int t){
+	Node* p=(Node*)malloc(sizeof(Node));
+	Node* q=(Node*)malloc(sizeof(Node));
+	p=create_nil(p,x);
+	q=create_nil(q,y);
+	p->knot.x=ec[t].x;
+	q->knot.x=ec[t+1].x;
+	Node* r=(Node*)malloc(sizeof(Node));
+	r->knot.frequency=x+y;
+	r->father=NULL;
+	r->left=p;
+	r->rightson=q;
+	q->father=r;
+	p->father=r;
+	plist->pointer=r;
+}
+//创建后面的父亲
+void renew_knot(List* plist,int x){
+	Node* r=(Node*)malloc(sizeof(Node));
+	Node* q=(Node*)malloc(sizeof(Node));
+	create_nil(q,x);//新平行节点 
+	r->father=NULL;
+	r->left=q;
+	r->rightson=plist->pointer;
+	r->knot.frequency=x+plist->pointer->knot.frequency;
+	q->father=r;
+	plist->pointer->father=r;
+	plist->pointer=r;
+}
+//合并
+void combine_knot(List* p,List *q){
+	Node* r=(Node*)malloc(sizeof(Node));
+	r->father=NULL;
+	r->left=p->pointer;
+	r->rightson=q->pointer;
+	r->knot.frequency=q->pointer->knot.frequency+p->pointer->knot.frequency;
+	p->pointer=r;
+	q->pointer=r;
+}
+//编码
+void assign_number(List* plist,char* temp,int cnt){
+	if(plist->pointer->left==NULL
+	&&plist->pointer->rightson==NULL){
+		memcpy(plist->pointer->code,temp,cnt);
+	}
+	else{
+		List pl,pr;
+		pl.pointer=plist->pointer->left;
+		pr.pointer=plist->pointer->rightson;
+		temp[cnt]='0';
+		assign_number(&pl,temp,cnt+1);
+		temp[cnt]='1';
+		assign_number(&pr,temp,cnt+1);
+	}
+}
+//遍历
+void go_through(List* plist,ec* outcome,int cnt){
+	static int count=cnt;
+	if(plist->pointer->left==NULL
+	&&plist->pointer->rightson==NULL){
+		memcpy(outcome[count].code,plist->pointer->code,strlen(plist->pointer->code));
+		outcome[count].code[strlen(plist->pointer->code)]='\0';
+		outcome[count].x=plist->pointer->knot.x;
+	}
+	else{
+		List pl,pr;
+		pl.pointer=plist->pointer->left;
+		pr.pointer=plist->pointer->rightson;
+		go_through(&pl,outcome,count);
+		count++;
+		go_through(&pr,outcome,count);
+	}
+} 
+//输出
+void print_code(ec* outcome,char* input_string,int len){
+	for(int i=0;i<len;i++){
+		for(int j=0;j<N;j++){
+			if(input_string[i]=='A'+j){
+				printf("%s ",outcome[j+1].code);
+			}
+		}
+	}
+}
+void free_malloc(List* plist){
+	if(plist->pointer!=NULL){
+		List pl,pr;
+		pl.pointer=plist->pointer->left;
+		pr.pointer=plist->pointer->rightson;
+		free_malloc(&pl);
+		free(plist->pointer);
+		free_malloc(&pr);
+	}
+}
+int main()
+{
+	int i,j,k,Count_character[N+1];//临时记录字符频数
+	char input_string[1000];//输入字符串
+	gets(input_string);
+	int len=strlen(input_string);
+		sum_each_character(input_string,Count_character,len);
+	ec ec[N+1];//结构体数组，并为其赋值
+	for(i=1;i<=N;i++){
+		ec[i].frequency=Count_character[i];
+		ec[i].x='A'+i-1;
+		ec[i].flag=0;
+	}
+	List p[1000];
+	for(k=0;k<1000;k++){
+		p[k].pointer=(Node*)malloc(sizeof(Node));
+	}
+	int cnt_number=1;
+	int cnt_pointer=1;
+	//按频数排序，方便选择、检索
+	for(int j=1;j<=N-1;j++){
+		sort(ec+j,ec+N+1,cmp_fre);
+		int t=min_pointer_fre(ec,j);//找最小的有结点的.
+		//创建结点 
+		if(t>=ec[j+1].frequency&&ec[j].flag==0&&ec[j+1].flag==0||t==0){
+			create_newknot(&p[cnt_pointer],ec[j].frequency,ec[j+1].frequency,ec,cnt_number);
+			cnt_pointer++;
+			ec[j+1].frequency=ec[j+1].frequency+ec[j].frequency;
+			ec[j+1].flag=1;
+		}
+		else{ 
+			int xbs=0,xbs1=0,xbs2=0;
+			for(xbs=1;xbs<=cnt_pointer;xbs++){
+				if(p[xbs].pointer->knot.frequency==ec[j].frequency){
+					xbs1=xbs;
+				}
+				if(p[xbs].pointer->knot.frequency==ec[j+1].frequency){
+					xbs2=xbs;
+				}
+				if(xbs1&xbs2) break;
+			}
+			//合并结点
+			if(ec[j].flag==1&&ec[j+1].flag==1){
+				combine_knot(&p[xbs1],&p[xbs2]);
+				ec[j+1].frequency=ec[j+1].frequency+ec[j].frequency;
+			}
+			else{//更新新的结点 
+				if(ec[j].flag==1){
+					renew_knot(&p[xbs1],ec[j+1].frequency);
+					ec[j+1].frequency=ec[j+1].frequency+ec[j].frequency;
+					ec[j+1].flag=1;
+				}
+				else if(ec[j+1].flag==1){
+					renew_knot(&p[xbs2],ec[j].frequency);
+					ec[j+1].frequency=ec[j+1].frequency+ec[j].frequency;
+				}
+			}
+		}
+		cnt_number++;
+	}
+	char temp[1000];
+	memset(temp,0,1000);
+	
+		assign_number(&p[1],temp,0);//赋编码值 
+	struct eachchar outcome[N+1];
+	
+		go_through(&p[1],outcome,1);//遍历获取叶子的字符+编码 
+	sort(outcome+1,outcome+N+1,cmp_x); 
+	
+		print_code(outcome,input_string,len);//打印 
+	free_malloc(&p[1]); 
+	return 0;
+}
