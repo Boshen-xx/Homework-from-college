@@ -1,0 +1,25 @@
+	/*波兰表达式是对表达式树前序遍历，递归即可
+	  */    
+	#include<bits/stdc++.h>    
+	using  namespace  std;    
+	double  bolan(void);    
+	int  main()    
+	{    
+	        double  ans;    
+   
+	        printf("%.6f",ans);    
+	        return  0;    
+	}    
+	double  bolan(void)    
+	{    
+	        double  x,y;    
+	        char  a[100];    
+	        scanf("%s",a);    
+	        switch  (a[0]){    
+	                case  '+':return  bolan()+bolan();    
+	                case  '-':return  bolan()-bolan();    
+	                case  '*':return  bolan()*bolan();    
+	                case  '/':return  bolan()/bolan();    
+	                default:return  atof(a);    
+	        }    
+	} 
