@@ -6,8 +6,7 @@
 	int  main()    
 	{    
 	        double  ans;    
-   
-	        printf("%.6f",ans);    
+	        printf("%.6f",bolan());    
 	        return  0;    
 	}    
 	double  bolan(void)    
